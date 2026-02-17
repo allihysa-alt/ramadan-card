@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطاقة تهنئة رمضان - الأكاديمية الوطنية للصناعات العسكرية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', 'Almarai', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5f3f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #1a472a;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #d4a574;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        label {
+            display: block;
+            color: #1a472a;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #d4a574;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #1a472a;
+            box-shadow: 0 0 0 3px rgba(26, 71, 42, 0.1);
+        }
+
+        .preview-section {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        #canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        #downloadBtn {
+            background: linear-gradient(135deg, #1a472a 0%, #2d5f3f 100%);
+            color: white;
+        }
+
+        #downloadBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 71, 42, 0.3);
+        }
+
+        #downloadBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #previewBtn {
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+        }
+
+        #previewBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 165, 116, 0.3);
+        }
+
+        #previewBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #finalImage {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            text-align: center;
+            color: #1a472a;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        .error {
+            text-align: center;
+            color: #dc3545;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8d7da;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            button {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌙 بطاقة تهنئة رمضان 🌙</h1>
+        <p class="subtitle">الأكاديمية الوطنية للصناعات العسكرية</p>
+
+        <div class="input-section">
+            <label for="nameInput">أدخل اسمك:</label>
+            <input 
+                type="text" 
+                id="nameInput" 
+                placeholder="مثال: أخوكم/ فهد بن سليمان الحربي"
+                maxlength="60"
+            >
+        </div>
+
+        <div class="preview-section">
+            <canvas id="canvas"></canvas>
+            <img id="finalImage" alt="البطاقة النهائية">
+            <div id="loading" class="loading">جاري تحميل الصورة...</div>
+            <div id="error" class="error" style="display: none;"></div>
+        </div>
+
+        <div class="button-group">
+            <button id="previewBtn" disabled>
+                👁️ عرض الصورة النهائية
+            </button>
+            <button id="downloadBtn" disabled>
+                ⬇️ تحميل البطاقة
+            </button>
+        </div>
+
+        <div class="footer">
+            <p>💡 <strong>للجوال:</strong> اضغط "عرض الصورة النهائية" ثم اضغط مطولاً على الصورة واختر "حفظ الصورة"</p>
+            <p style="margin-top: 10px;">رمضان كريم وكل عام وأنتم بخير 🌟</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const nameInput = document.getElementById('nameInput');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const previewBtn = document.getElementById('previewBtn');
+        const finalImage = document.getElementById('finalImage');
+        const loadingDiv = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+
+        let backgroundImage = new Image();
+        let imageLoaded = false;
+
+        // تحميل الصورة من ملف خارجي
+        backgroundImage.crossOrigin = "anonymous";
+        
+        backgroundImage.onload = function() {
+            imageLoaded = true;
+            canvas.width = backgroundImage.width;
+            canvas.height = backgroundImage.height;
+            loadingDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            downloadBtn.disabled = false;
+            previewBtn.disabled = false;
+            drawCard();
+            console.log('Image loaded successfully!');
+        };
+
+        backgroundImage.onerror = function(e) {
+            loadingDiv.style.display = 'none';
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = 'خطأ في تحميل الصورة. تأكد من وجود ملف ramadan-background.jpg في نفس المجلد.';
+            console.error('Image loading error:', e);
+        };
+
+        // تحميل الصورة - استخدم نفس اسم الملف الذي رفعته
+        backgroundImage.src = 'ramadan-background.jpg';
+
+        function drawCard() {
+            if (!imageLoaded) return;
+            
+            // رسم الصورة الخلفية
+            ctx.drawImage(backgroundImage, 0, 0);
+            
+            // إضافة الاسم
+            const name = nameInput.value.trim();
+            if (name) {
+                // إعدادات النص
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // حساب حجم الخط بناءً على عرض الصورة
+                const fontSize = canvas.width * 0.035; // حوالي 3.5% من عرض الصورة
+                ctx.font = `${fontSize}px 'IBM Plex Sans Arabic', 'Almarai', Arial, sans-serif`;
+                
+                // موقع النص (أسفل "أهنئكم بحلول شهر رمضان المبارك")
+                const textX = canvas.width / 2;
+                const textY = canvas.height * 0.85; // 85% من أعلى الصورة
+                
+                // رسم ظل للنص لجعله أوضح
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+                ctx.shadowBlur = 8;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                
+                // رسم النص باللون الأخضر الداكن
+                ctx.fillStyle = '#1a472a';
+                ctx.fillText(name, textX, textY);
+                
+                // إزالة الظل
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // تحديث البطاقة عند تغيير الاسم
+        nameInput.addEventListener('input', drawCard);
+
+        // عرض الصورة النهائية (للجوال - يمكن الضغط المطول لحفظها)
+        previewBtn.addEventListener('click', function() {
+            if (!imageLoaded) {
+                alert('الرجاء الانتظار حتى يتم تحميل الصورة');
+                return;
+            }
+            
+            // تحويل Canvas إلى صورة
+            const imageUrl = canvas.toDataURL('image/png', 1.0);
+            finalImage.src = imageUrl;
+            finalImage.style.display = 'block';
+            
+            // التمرير للصورة
+            setTimeout(() => {
+                finalImage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        });
+
+        // تحميل البطاقة - محسّن للجوال
+        downloadBtn.addEventListener('click', function() {
+            if (!imageLoaded) {
+                alert('الرجاء الانتظار حتى يتم تحميل الصورة');
+                return;
+            }
+            
+            try {
+                // تحويل Canvas إلى Blob للتوافق الأفضل مع الجوال
+                canvas.toBlob(function(blob) {
+                    if (!blob) {
+                        alert('حدث خطأ في إنشاء الصورة');
+                        return;
+                    }
+                    
+                    const name = nameInput.value.trim() || 'رمضان_كريم';
+                    const fileName = `بطاقة_رمضان_${name}.png`;
+                    
+                    // للأجهزة التي تدعم Share API (معظم الجوالات)
+                    if (navigator.share && navigator.canShare) {
+                        const file = new File([blob], fileName, { type: 'image/png' });
+                        
+                        if (navigator.canShare({ files: [file] })) {
+                            navigator.share({
+                                files: [file],
+                                title: 'بطاقة تهنئة رمضان',
+                                text: 'رمضان كريم'
+                            }).catch(err => {
+                                // إذا ألغى المستخدم المشاركة، نستخدم التحميل العادي
+                                if (err.name !== 'AbortError') {
+                                    fallbackDownload(blob, fileName);
+                                }
+                            });
+                            return;
+                        }
+                    }
+                    
+                    // التحميل العادي للأجهزة الأخرى
+                    fallbackDownload(blob, fileName);
+                    
+                }, 'image/png', 1.0);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                alert('حدث خطأ في التحميل. حاول مرة أخرى.');
+            }
+        });
+        
+        // دالة التحميل الاحتياطية
+        function fallbackDownload(blob, fileName) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            
+            // إضافة الرابط للصفحة مؤقتاً
+            document.body.appendChild(link);
+            link.click();
+            
+            // تنظيف
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+    </script>
+</body>
+</html>
